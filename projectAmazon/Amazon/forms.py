@@ -2,21 +2,17 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from Amazon.models import Cliente
+from datetime import date
 
-class UserRegistrationForm(forms.ModelForm):
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Repeat password', widget=forms.PasswordInput)
-
-    class Meta:
-        model = User
-        fields = ('username', 'first_name', 'last_name', 'email')
-
-    def clean_password2(self):
-        cd = self.cleaned_data
-        if cd['password'] != cd['password2']:
-            raise forms.ValidationError('Passwords don\'t match.')
-        return cd['password2']
-
+def validate_age_range(value):
+    min_age = 18
+    max_age = 90
+    if value:
+        today = date.today()
+        age = today.year - value.year - ((today.month, today.day) < (value.month, value.day))
+        if age < min_age or age > max_age:
+            raise ValidationError(f"La edad debe estar entre {min_age} y {max_age} años.")
+        
 def no_numeros_validator(value):
     if any(char.isdigit() for char in value):
         raise ValidationError('El campo no debe contener números')
@@ -29,9 +25,14 @@ class formCliente(forms.Form):
     correo = forms.EmailField(label="Correo electrónico")  
     nombres=forms.CharField(max_length=30,validators=[no_numeros_validator])
     telefono=forms.CharField(max_length=9,validators=[no_letras_validator])
-    fecha_Nacimiento=forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    fecha_Nacimiento=forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), validators=[validate_age_range])
 
     class Meta:
         model = Cliente
         fields = ['correo', 'nombres','telefono', 'fecha_Nacimiento']
+    
+    def clean_fecha_Nacimiento(self):
+        fecha_nacimiento = self.cleaned_data.get('fecha_Nacimiento')
+        validate_age_range(fecha_nacimiento)  # Llamar al validador personalizado para fecha de nacimiento
+        return fecha_nacimiento
     

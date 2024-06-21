@@ -33,7 +33,7 @@
                         <form method="post">
                             {% csrf_token %}
                             
-                            <div class="mb-3">
+                            <div class="mb-1">
                                 <label for="id_username" class="form-label">Nombre de usuario</label>
                                 {{ formUser.username|add_class:"form-control" }}
                                 {% for error in formUser.username.errors %}
