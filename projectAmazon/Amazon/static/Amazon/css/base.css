@@ -1,0 +1,85 @@
+/* base.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f3f3f3;
+    color: #111;
+    line-height: 1.6;
+  }
+  
+  .navbar {
+    background-color: #232f3e;
+  }
+  
+  .navbar-brand {
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+  
+  .navbar-nav .nav-link {
+    color: #c7d1d8;
+    font-weight: 500;
+  }
+  
+  .navbar-nav .nav-link:hover {
+    color: #fff;
+  }
+  
+  .form-control {
+    border-color: #ff9900;
+    background-color: #3e4856;
+    color: #fff;
+  }
+  
+  .btn-warning {
+    background-color: #ff9900;
+    border-color: #ff9900;
+    color: #fff;
+  }
+  
+  .btn-warning:hover {
+    background-color: #ff6600;
+    border-color: #ff6600;
+  }
+  
+  .carousel-item img {
+    height: 400px;
+    object-fit: cover;
+  }
+  
+  .card {
+    transition: transform 0.2s ease;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .card-text {
+    color: #555;
+  }
+  
+  .btn-primary {
+    background-color: #ff9900;
+    border-color: #ff9900;
+  }
+  
+  .btn-primary:hover {
+    background-color: #ff6600;
+    border-color: #ff6600;
+  }
+  
+  @media (max-width: 768px) {
+    .navbar-nav {
+      flex-direction: column;
+    }
+  }
+  

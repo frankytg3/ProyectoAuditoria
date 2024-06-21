@@ -1,0 +1,30 @@
+{% extends "Amazon/base.html" %} 
+{% block content %}
+    <!-- Sección de productos populares -->
+    <div class="container mt-5">
+        <h2 class="mb-4">Productos Populares</h2>
+        <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+            <img src="https://via.placeholder.com/300x200.png?text=Producto+1" class="card-img-top" alt="Producto 1">
+            <div class="card-body">
+                <h5 class="card-title">Producto 1</h5>
+                <p class="card-text">Descripción corta del producto.</p>
+                <a href="#" class="btn btn-warning btn-sm">Ver Detalles</a>
+            </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+            <img src="https://via.placeholder.com/300x200.png?text=Producto+2" class="card-img-top" alt="Producto 2">
+            <div class="card-body">
+                <h5 class="card-title">Producto 2</h5>
+                <p class="card-text">Descripción corta del producto.</p>
+                <a href="#" class="btn btn-warning btn-sm">Ver Detalles</a>
+            </div>
+            </div>
+        </div>
+        <!-- Más productos similares aquí -->
+        </div>
+    </div>
+{% endblock content %}
