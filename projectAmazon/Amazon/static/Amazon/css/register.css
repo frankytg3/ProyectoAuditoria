@@ -1,0 +1,46 @@
+/* Amazon-like registration form styles */
+
+.card {
+    border: none;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #f0f2f5;
+    border-bottom: 1px solid #dcdcdc;
+}
+
+.card-title {
+    margin-bottom: 0;
+}
+
+.card-body {
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    border: 1px solid #ced4da;
+}
+
+.btn-primary {
+    background-color: #ff9900;
+    border-color: #ff9900;
+}
+
+.btn-primary:hover {
+    background-color: #ffad33;
+    border-color: #ffad33;
+}
+
+.text-muted {
+    color: #6b7280;
+}
+
+.text-center {
+    text-align: center;
+    margin-top: 20px;
+}
