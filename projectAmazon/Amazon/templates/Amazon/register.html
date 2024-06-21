@@ -1,4 +1,5 @@
 {% load static %}
+{% load widget_tweaks %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,43 +7,107 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrarse - Amazon</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'Amazon/css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'Amazon/css/register.css' %}">  <!-- Estilos personalizados para el registro -->
+    <link rel="stylesheet" href="{% static 'Amazon/css/register.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/signin.css' %}"> <!-- Estilos personalizados para el registro -->
 </head>
 <body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{% url 'productos' %}">
+            <img src="{% static 'Amazon/img/logo.png' %}" alt="Logo" width="150">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button> 
+    </nav>
+
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Crear cuenta</h4>
+                    <div class="text-center mb-4">
+                        <img src="{% static 'Amazon/img/logo2.webp' %}" alt="Logo Amazon" width="100">
                     </div>
+                    <h5 class="card-title text-center">Crear Cuenta</h5>
                     <div class="card-body">
                         <form method="post">
                             {% csrf_token %}
-                            <div class="form-group">
-                                {{ form.username.label_tag }}
-                                {{ form.username }}
-                                <small class="form-text text-muted">Nombre de usuario</small>
+                            
+                            <div class="mb-3">
+                                <label for="id_username" class="form-label">Nombre de usuario</label>
+                                {{ formUser.username|add_class:"form-control" }}
+                                {% for error in formUser.username.errors %}
+                                <div class="error-message text-danger">{{ error }}</div>
+                                {% endfor %}
                             </div>
-                            <div class="form-group">
-                                {{ form.email.label_tag }}
-                                {{ form.email }}
-                                <small class="form-text text-muted">Dirección de correo electrónico</small>
+                           
+                            <div class="mb-3">
+                                <label for="id_password1" class="form-label">Contraseña</label>
+                                <div class="input-group">
+                                    {{ formUser.password1|add_class:"form-control" }}
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-outline-secondary toggle-password" data-target="#id_password1">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                {% for error in formUser.password1.errors %}
+                                <div class="error-message text-warning">{{ error }}</div>
+                                {% endfor %}
                             </div>
-                            <div class="form-group">
-                                {{ form.password1.label_tag }}
-                                {{ form.password1 }}
-                                <small class="form-text text-muted">Contraseña</small>
+                            
+                            <div class="mb-3">
+                                <label for="id_password2" class="form-label">Confirmar contraseña</label>
+                                <div class="input-group">
+                                    {{ formUser.password2|add_class:"form-control" }}
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-outline-secondary toggle-password" data-target="#id_password2">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                {% for error in formUser.password2.errors %}
+                                <div class="error-message text-warning">{{ error }}</div>
+                                {% endfor %}
+                                <div class="error-message text-danger">{{ errorp }}</div>
+                            </div> 
+                            <div class="mb-3">
+                                <label for="id_nombres" class="form-label">Nombres y Apellidos</label>
+                                {{ formCliente.nombres|add_class:"form-control" }}
+                                {% for error in formCliente.nombres.errors %}
+                                <div class="error-message text-danger">{{ error }}</div>
+                                {% endfor %}
                             </div>
-                            <div class="form-group">
-                                {{ form.password2.label_tag }}
-                                {{ form.password2 }}
-                                <small class="form-text text-muted">Confirmar contraseña</small>
+                            <div class="mb-3">
+                                <label for="id_correo" class="form-label">Correo Electrónico</label>
+                                {{ formCliente.correo|add_class:"form-control" }}
+                                {% for error in formCliente.correo.errors %}
+                                <div class="error-message text-danger">{{ error }}</div>
+                                {% endfor %}
                             </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="id_telefono" class="form-label">Teléfono</label>
+                                    {{ formCliente.telefono|add_class:"form-control" }}
+                                    {% for error in formCliente.telefono.errors %}
+                                    <div class="error-message text-danger">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="id_fecha_Nacimiento" class="form-label">Fecha de Nacimiento</label>
+                                    {{ formCliente.fecha_Nacimiento|add_class:"form-control" }}
+                                    {% for error in formCliente.fecha_Nacimiento.errors %}
+                                    <div class="error-message text-danger">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
                             <button type="submit" class="btn btn-primary btn-block">Registrarse</button>
                         </form>
                         <hr>
+                        <div id="legalTextRow" class="a-row a-spacing-top-medium a-size-small">
+                            Al crear una cuenta, aceptas las <a href="/gp/help/customer/display.html/ref=ap_register_notification_condition_of_use?ie=UTF8&amp;nodeId=508088">Condiciones de Uso</a> y el <a href="/gp/help/customer/display.html/ref=ap_register_notification_privacy_notice?ie=UTF8&amp;nodeId=468496">Aviso de Privacidad</a> de amazon.com.
+                        </div>
                         <p class="text-center">
                             ¿Ya tienes una cuenta? <a href="{% url 'login' %}">Iniciar sesión</a>
                         </p>
@@ -54,5 +119,20 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePasswordButtons = document.querySelectorAll('.toggle-password');
+            togglePasswordButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const target = document.querySelector(button.getAttribute('data-target'));
+                    const type = target.getAttribute('type') === 'password' ? 'text' : 'password';
+                    target.setAttribute('type', type);
+                    button.querySelector('i').classList.toggle('fa-eye');
+                    button.querySelector('i').classList.toggle('fa-eye-slash');
+                });
+            });
+        });
+    </script>
 </body>
 </html>

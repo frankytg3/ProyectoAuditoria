@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Amazon',
+    'widget_tweaks',
 ]
 
 LOGIN_REDIRECT_URL = '/'
