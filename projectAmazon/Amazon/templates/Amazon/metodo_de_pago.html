@@ -1,0 +1,181 @@
+<!-- templates/amazon/metodo_de_pago.html -->
+{% extends "Amazon/base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block detalle_prod %}
+
+<style>
+    .timeline {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .step {
+        display: flex;
+        align-items: center;
+        width: 30%;
+        padding: 20px;
+        background-color: #f0f0f0;
+        border-radius: 8px;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        background-color: #007bff; /* Color base de las bolitas */
+        color: white;
+        font-size: 1.2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .step-content {
+        flex: 1;
+    }
+
+    .step h4 {
+        margin-bottom: 5px;
+    }
+
+    .step p {
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .completed .step-number {
+        background-color: #28a745; /* Color verde para los pasos completados */
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2>Selecciona tu Método de Pago</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_metodo_pago">Selecciona el método de pago:</label>
+                    <select id="id_metodo_pago" name="metodo_pago" class="form-control">
+                        <option value="yape">YAPE</option>
+                        <option value="tarjeta">Tarjeta de Crédito/Débito</option>
+                    </select>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <button type="submit" class="btn btn-primary">Continuar</button>
+                    
+                    <a href="{% url 'direccion_y_carrito' %}" class="btn btn-danger ml-auto">Regresar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if metodo_pago == 'YAPE' %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2>Pago con YAPE</h2>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Escanea este QR con YAPE</h4>
+                    <img src="{% static 'Amazon/img/QR.jpg' %}" alt="QR de YAPE" class="img-fluid">
+                    <h3 class="card-title text-center">Monto a cobrar: ${{ monto_a_cobrar }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if metodo_pago == 'Tarjeta de Crédito' %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2>Pago con Tarjeta de Crédito/Débito</h2>
+            <form method="post" >
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label for="id_numero_tarjeta" class="form-label">Número de Tarjeta</label>
+                        {{ form.numero_tarjeta|add_class:"form-control" }}
+                        {% for error in form.numero_tarjeta.errors %}
+                        <div class="error-message text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="id_fecha_expiracion" class="form-label">(MM/YY)</label>
+                        {{ form.fecha_expiracion|add_class:"form-control" }}
+                        {% for error in form.fecha_expiracion.errors %}
+                        <div class="error-message text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label for="id_nombre_propietario" class="form-label">Nombre del Propietario de la Tarjeta</label>
+                        {{ form.nombre_propietario|add_class:"form-control" }}
+                        {% for error in form.nombre_propietario.errors %}
+                        <div class="error-message text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="id_cvv" class="form-label">CVV</label>
+                        {{ form.cvv|add_class:"form-control" }}
+                        {% for error in form.cvv.errors %}
+                        <div class="error-message text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            
+                <div class="mb-1">
+                    <label for="id_guardar_tarjeta" >Guardar tarjeta de forma segura para pagos futuros</label>
+                    {{ form.guardar_tarjeta }}
+        
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Pagar ${{ total_a_pagar }}</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2>Pasos a Seguir</h2>
+    </div>
+    <div class="timeline">
+        <div class="step completed">
+            <div class="step-number completed">1</div>
+            <div class="step-content">
+                <h4>Iniciar Sección</h4>
+                <p>Ingresa a tu cuenta de usuario.</p>
+            </div>
+        </div>
+        <div class="step completed">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h4>Carrito de Compras</h4>
+                <p>Agrega productos al carrito.</p>
+            </div>
+        </div>
+        <div class="step completed">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h4>Datos de Envío</h4>
+                <p>Proporciona la información necesaria para el envío.</p>
+            </div>
+        </div>
+
+        <div class="step completed">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h4>Pagar</h4>
+                <p>Elegir su metodo de pago</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

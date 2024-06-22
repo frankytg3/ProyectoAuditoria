@@ -1,7 +1,7 @@
 {% extends "Amazon/base.html" %}
 {% load static %}
 {% load widget_tweaks %}
-{% block content %}
+{% block detalle_prod %}
     <style>
         .product-card-img {
             width: 100%;
@@ -11,7 +11,6 @@
     </style>
     <!-- Sección de productos populares -->
     <div class="container mt-5">
-        <h2 class="mb-4">Productos Populares</h2>
         <div class="row">
             {% for producto in productos %}
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
@@ -29,5 +28,4 @@
             {% endfor %}
         </div>
     </div>
-{% endblock content %}
-
+{% endblock detalle_prod %}

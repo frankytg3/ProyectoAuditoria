@@ -1,0 +1,136 @@
+{% extends "Amazon/base.html" %}
+{% block detalle_prod %}
+
+<style>
+    .timeline {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .step {
+        display: flex;
+        align-items: center;
+        width: 30%;
+        padding: 20px;
+        background-color: #f0f0f0;
+        border-radius: 8px;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        background-color: #007bff; /* Color base de las bolitas */
+        color: white;
+        font-size: 1.2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .step-content {
+        flex: 1;
+    }
+
+    .step h4 {
+        margin-bottom: 5px;
+    }
+
+    .step p {
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .completed .step-number {
+        background-color: #28a745; /* Color verde para los pasos completados */
+    }
+</style>
+
+
+<div class="container mt-5">
+    <h2>Carrito de Compras</h2>
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.producto.nombre }}</td>
+                <td>S/{{ item.producto.precio }}</td>
+                <td>
+                    <form method="post" action="{% url 'actualizar_cantidad' item.id %}">
+                        {% csrf_token %}
+                        <!-- Limitar la cantidad a la disponible y máximo a 30 -->
+                        <input type="number" name="cantidad" value="{{ item.cantidad }}" min="1" max="{% if item.producto.cantidad < 30 %}{{ item.producto.cantidad }}{% else %}30{% endif %}" class="form-control" style="width: 80px; display: inline;">
+                        <button type="submit" class="btn btn-primary btn-sm">Actualizar</button>
+                    </form>
+                </td>
+                <td>S/{{ item.subtotal }}</td>
+                <td>
+                    <form method="post" action="{% url 'actualizar_cantidad' item.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="cantidad" value="0">
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <h3>Total: S/{{ total }}</h3>
+        {% if total != 0 %}
+            <a href="{% url 'direccion_y_carrito' %}" class="btn btn-success">Verificar</a>
+        {% else %}
+            <button class="btn btn-success" disabled>Verificar</button>
+        {% endif %} 
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2>Pasos a Seguir</h2>
+    </div>
+    <div class="timeline">
+        <div class="step completed">
+            <div class="step-number completed">1</div>
+            <div class="step-content">
+                <h4>Iniciar Sección</h4>
+                <p>Ingresa a tu cuenta de usuario.</p>
+            </div>
+        </div>
+        <div class="step completed">
+            <div class="step-number ">2</div>
+            <div class="step-content">
+                <h4>Carrito de Compras</h4>
+                <p>Agrega productos al carrito.</p>
+            </div>
+        </div>
+        <div class="step ">
+            <div class="step-number ">3</div>
+            <div class="step-content">
+                <h4>Datos de Envío</h4>
+                <p>Proporciona la información necesaria para el envío.</p>
+            </div>
+        </div>
+        <div class="step ">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h4>Pagar</h4>
+                <p>Elegir su metodo de pago</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

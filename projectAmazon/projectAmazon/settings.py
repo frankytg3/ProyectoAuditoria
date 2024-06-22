@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
 ]
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'login/'
+LOGOUT_REDIRECT_URL = 'logout/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -127,8 +127,15 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'Amazon/static'),
 ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Backend por defecto
+    'Amazon.backends.EmailOrUsernameModelBackend',  # Tu backend personalizado
+]

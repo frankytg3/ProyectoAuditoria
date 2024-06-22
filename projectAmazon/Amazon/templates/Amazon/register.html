@@ -71,13 +71,24 @@
                                 {% endfor %}
                                 <div class="error-message text-danger">{{ errorp }}</div>
                             </div> 
-                            <div class="mb-3">
-                                <label for="id_nombres" class="form-label">Nombres y Apellidos</label>
-                                {{ formCliente.nombres|add_class:"form-control" }}
-                                {% for error in formCliente.nombres.errors %}
-                                <div class="error-message text-danger">{{ error }}</div>
-                                {% endfor %}
+
+                            <div class="row">
+                                <div class="col-md-8 mb-3">
+                                    <label for="id_nombres" class="form-label">Nombres y Apellidos</label>
+                                    {{ formCliente.nombres|add_class:"form-control" }}
+                                    {% for error in formCliente.nombres.errors %}
+                                    <div class="error-message text-danger">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="id_sexo" class="form-label">Sexo</label>
+                                    {{ formCliente.sexo|add_class:"form-control" }}
+                                    {% for error in formCliente.sexo.errors %}
+                                    <div class="error-message text-danger">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
                             </div>
+
                             <div class="mb-3">
                                 <label for="id_correo" class="form-label">Correo Electrónico</label>
                                 {{ formCliente.correo|add_class:"form-control" }}

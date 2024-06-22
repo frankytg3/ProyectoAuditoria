@@ -1,0 +1,20 @@
+<!-- templates/amazon/pago_realizado.html -->
+{% extends "Amazon/base.html" %}
+
+{% block detalle_prod %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="alert alert-success text-center" role="alert">
+                ¡Pago realizado con éxito!
+            </div>
+            <p class="text-center">
+                ¡Gracias por tu compra!
+            </p>
+            <div class="text-center mt-3">
+                <a href="{% url 'productos' %}" class="btn btn-primary">Volver a la página de inicio</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

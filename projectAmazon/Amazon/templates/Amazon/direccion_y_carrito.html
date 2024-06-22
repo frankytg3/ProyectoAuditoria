@@ -1,0 +1,196 @@
+<!-- templates/amazon/direccion_y_carrito.html -->
+{% extends "Amazon/base.html" %}
+{% load widget_tweaks %}
+{% block detalle_prod %}
+
+<style>
+    .timeline {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .step {
+        display: flex;
+        align-items: center;
+        width: 30%;
+        padding: 20px;
+        background-color: #f0f0f0;
+        border-radius: 8px;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        background-color: #007bff; /* Color base de las bolitas */
+        color: white;
+        font-size: 1.2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .step-content {
+        flex: 1;
+    }
+
+    .step h4 {
+        margin-bottom: 5px;
+    }
+
+    .step p {
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .completed .step-number {
+        background-color: #28a745; /* Color verde para los pasos completados */
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Formulario de Dirección de Envío -->
+        <div class="col-md-5">
+            <h2>Dirección de Envío</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-1">
+                    <label for="id_nombre" class="form-label">Nombre</label>
+                    {{ form.nombre|add_class:"form-control" }}
+                    {% for error in form.nombre.errors %}
+                    <div class="error-message text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="mb-1">
+                    <label for="id_telefono" class="form-label">Teléfono</label>
+                    {{ form.telefono|add_class:"form-control" }}
+                    {% for error in form.telefono.errors %}
+                    <div class="error-message text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="mb-1">
+                    <label for="id_direccion" class="form-label">Dirección</label>
+                    {{ form.direccion|add_class:"form-control" }}
+                    {% for error in form.direccion.errors %}
+                    <div class="error-message text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="mb-1">
+                    <label for="id_estado" class="form-label">Región</label>
+                    {{ form.estado|add_class:"form-control" }}
+                    {% for error in form.estado.errors %}
+                    <div class="error-message text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="mb-1">
+                    <label for="id_codigo_postal" class="form-label">Código Postal</label>
+                    {{ form.codigo_postal|add_class:"form-control" }}
+                    {% for error in form.codigo_postal.errors %}
+                    <div class="error-message text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                
+                <button type="submit" class="btn btn-primary" {% if formularioEnviado %}disabled{% endif %}>Guardar Dirección</button>
+                {% if formularioEnviado %}
+                <span class="text-success ml-2">Dirección guardada</span>
+                {% else %}
+                <span class="text-danger ml-2">Por favor completa la dirección para proceder con el pago.</span>
+                {% endif %}
+            </form>
+        </div>
+
+        <!-- Resumen del Carrito de Compras -->
+        <div class="col-md-6">
+            <h2>Resumen del Carrito de Compras</h2>
+            <table class="table table-bordered mt-3">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.producto.nombre }}</td>
+                        <td>{{ item.cantidad }}</td>
+                        <td>${{ item.producto.precio }}</td>
+                        <td>${{ item.subtotal }}</td>  <!-- Mostrar el subtotal calculado -->
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="3"><strong>Total Parcial</strong></td>
+                        <td><strong>${{ total_parcial }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><strong>IVA (5%)</strong></td>
+                        <td><strong>${{ iva }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><strong>Total</strong></td>
+                        <td><strong>${{ total_con_iva }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            <form method="#" action="#">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Código de Cupón" aria-label="Código de Cupón" name="cupon">
+                    <button class="btn btn-outline-secondary" type="submit">Aplicar</button>
+                </div>
+            </form>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <a href="{% url 'metodo_de_pago' %}" class="btn btn-success {% if not formularioEnviado %}disabled{% endif %}">Proceder con el Pago</a>
+                {% if not formularioEnviado %}
+                <span class="text-danger">Por favor completa la dirección para proceder con el pago.</span>
+                {% endif %}
+                <a href="{% url 'ver_carrito' %}" class="btn btn-danger ml-auto">Regresar</a>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2>Pasos a Seguir</h2>
+    </div>
+    <div class="timeline">
+        <div class="step completed">
+            <div class="step-number completed">1</div>
+            <div class="step-content">
+                <h4>Iniciar Sección</h4>
+                <p>Ingresa a tu cuenta de usuario.</p>
+            </div>
+        </div>
+        <div class="step completed">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h4>Carrito de Compras</h4>
+                <p>Agrega productos al carrito.</p>
+            </div>
+        </div>
+        <div class="step completed">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h4>Datos de Envío</h4>
+                <p>Proporciona la información necesaria para el envío.</p>
+            </div>
+        </div>
+
+        <div class="step ">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h4>Pagar</h4>
+                <p>Elegir su metodo de pago</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
