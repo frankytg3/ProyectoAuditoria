@@ -1,0 +1,44 @@
+.timeline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    width: 30%;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background-color: #007bff; /* Color base de las bolitas */
+    color: white;
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step h4 {
+    margin-bottom: 5px;
+}
+
+.step p {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.completed .step-number {
+    background-color: #28a745; /* Color verde para los pasos completados */
+}
