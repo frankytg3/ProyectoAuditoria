@@ -81,14 +81,15 @@ def detalle_producto(request, id):
 def agregar_al_carrito(request, id):
     producto = get_object_or_404(Producto, id=id)
     cantidad = int(request.POST.get('cantidad', 1))
-    print(cantidad)
     carrito, created = Carrito.objects.get_or_create(usuario=request.user)
 
     item, created = ItemCarrito.objects.get_or_create(carrito=carrito, producto=producto)
     
-    item.cantidad = cantidad
+    if not created:
+        item.cantidad += cantidad
+    else:
+        item.cantidad = cantidad
 
-    print(item.cantidad)
     item.save()
 
     messages.success(request, f'{producto.nombre} se ha agregado al carrito.')
@@ -114,9 +115,11 @@ def actualizar_cantidad(request, id):
 
 @login_required
 def direccion_y_carrito(request):
-    items = ItemCarrito.objects.all()  # Obtener todos los ítems del carrito
+    carrito_usuario = Carrito.objects.get(usuario=request.user)  # Obtener el carrito del usuario actual
+    items_carrito = ItemCarrito.objects.filter(carrito=carrito_usuario)  # Obtener todos los ítems del carrito del usuario actual
+
     total_parcial = 0
-    for item in items:
+    for item in items_carrito:
         # Calcular el subtotal de cada ítem
         subtotal = item.producto.precio * item.cantidad
         item.subtotal = subtotal
@@ -143,7 +146,7 @@ def direccion_y_carrito(request):
 
     context = {
         'form': form,
-        'items': items,
+        'items': items_carrito,
         'total_parcial': total_parcial,
         'iva': iva,
         'total_con_iva': total_con_iva,
