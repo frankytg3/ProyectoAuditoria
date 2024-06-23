@@ -51,97 +51,88 @@
     }
 </style>
 
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <h2>Selecciona tu Método de Pago</h2>
-            <form method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="id_metodo_pago">Selecciona el método de pago:</label>
-                    <select id="id_metodo_pago" name="metodo_pago" class="form-control">
-                        <option value="yape">YAPE</option>
-                        <option value="tarjeta">Tarjeta de Crédito/Débito</option>
-                    </select>
-                </div>
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                    <button type="submit" class="btn btn-primary">Continuar</button>
-                    
-                    <a href="{% url 'direccion_y_carrito' %}" class="btn btn-danger ml-auto">Regresar</a>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
-{% if metodo_pago == 'YAPE' %}
+
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <h2>Pago con YAPE</h2>
             <div class="card">
-                <div class="card-body">
+                <div class="card-body text-center">
                     <h4 class="card-title">Escanea este QR con YAPE</h4>
-                    <img src="{% static 'Amazon/img/QR.jpg' %}" alt="QR de YAPE" class="img-fluid">
-                    <h3 class="card-title text-center">Monto a cobrar: ${{ monto_a_cobrar }}</h3>
+                    <div class="img-wrapper">
+                        <img src="{% static 'Amazon/img/QR.jpg' %}" alt="QR de YAPE" class="img-fluid" style="max-width: 50%; height: auto;">
+                    </div>
+                    <h3 class="card-title text-center mt-3">Monto a cobrar: ${{ total_a_pagar }}</h3>
                 </div>
             </div>
         </div>
     </div>
 </div>
-{% endif %}
 
-{% if metodo_pago == 'Tarjeta de Crédito' %}
+
 <div class="container mt-5">
     <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <h2>Pago con Tarjeta de Crédito/Débito</h2>
-            <form method="post" >
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-md-8 mb-3">
-                        <label for="id_numero_tarjeta" class="form-label">Número de Tarjeta</label>
-                        {{ form.numero_tarjeta|add_class:"form-control" }}
-                        {% for error in form.numero_tarjeta.errors %}
-                        <div class="error-message text-danger">{{ error }}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="id_fecha_expiracion" class="form-label">(MM/YY)</label>
-                        {{ form.fecha_expiracion|add_class:"form-control" }}
-                        {% for error in form.fecha_expiracion.errors %}
-                        <div class="error-message text-danger">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+        <div class=" col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4 class="card-title">Pago con Tarjeta de Crédito/Débito</h4>
+                    <form method="post" >
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label for="id_numero_tarjeta" class="form-label">Número de Tarjeta</label>
+                                {{ form.numero_tarjeta|add_class:"form-control" }}
+                                {% for error in form.numero_tarjeta.errors %}
+                                <div class="error-message text-danger">{{ error }}</div>
+                                {% endfor %}
+                                <div id="tipo_tarjeta" class="mt-2"></div> <!-- Contenedor para mostrar el tipo de tarjeta -->
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="id_fecha_expiracion" class="form-label">(MM/YY)</label>
+                                {{ form.fecha_expiracion|add_class:"form-control" }}
+                                {% for error in form.fecha_expiracion.errors %}
+                                <div class="error-message text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label for="id_nombre_propietario" class="form-label">Nombre del Propietario de la Tarjeta</label>
+                                {{ form.nombre_propietario|add_class:"form-control" }}
+                                {% for error in form.nombre_propietario.errors %}
+                                <div class="error-message text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="id_cvv" class="form-label">CVV</label>
+                                {{ form.cvv|add_class:"form-control" }}
+                                {% for error in form.cvv.errors %}
+                                <div class="error-message text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    
+                        <div class="mb-1">
+                            <label for="id_guardar_tarjeta" >Guardar tarjeta de forma segura para pagos futuros</label>
+                            {{ form.guardar_tarjeta }}
+                
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <button type="submit" class="btn btn-primary mt-3">Pagar ${{ total_a_pagar }}</button>
+                            
+                            <a href="{% url 'direccion_y_carrito' %}" class="btn btn-danger ml-auto">Regresar</a>
+                        </div>
+
+                    </form>
                 </div>
-                <div class="row">
-                    <div class="col-md-8 mb-3">
-                        <label for="id_nombre_propietario" class="form-label">Nombre del Propietario de la Tarjeta</label>
-                        {{ form.nombre_propietario|add_class:"form-control" }}
-                        {% for error in form.nombre_propietario.errors %}
-                        <div class="error-message text-danger">{{ error }}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="id_cvv" class="form-label">CVV</label>
-                        {{ form.cvv|add_class:"form-control" }}
-                        {% for error in form.cvv.errors %}
-                        <div class="error-message text-danger">{{ error }}</div>
-                        {% endfor %}
-                    </div>
-                </div>
-            
-                <div class="mb-1">
-                    <label for="id_guardar_tarjeta" >Guardar tarjeta de forma segura para pagos futuros</label>
-                    {{ form.guardar_tarjeta }}
-        
-                </div>
-                <button type="submit" class="btn btn-primary mt-3">Pagar ${{ total_a_pagar }}</button>
-            </form>
+            </div>
         </div>
     </div>
 </div>
-{% endif %}
+
+
+
 <div class="container mt-5">
     <div class="text-center mb-4">
         <h2>Pasos a Seguir</h2>
@@ -178,4 +169,46 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const numeroTarjetaInput = document.getElementById('id_numero_tarjeta');
+        const tipoTarjetaDiv = document.getElementById('tipo_tarjeta');
+
+        function identificarTarjeta(numeroTarjeta) {
+            numeroTarjeta = numeroTarjeta.replace(/\s|-/g, ''); // Remove spaces and dashes
+
+            if (/^\d+$/.test(numeroTarjeta)) {
+                const longitud = numeroTarjeta.length;
+                if (numeroTarjeta.startsWith('4') && (longitud === 13 || longitud === 16)) {
+                    return { tipo: "Visa", icono: "fab fa-cc-visa" }; // Icono de Visa
+                } else if ((/^5[1-5]/.test(numeroTarjeta) || /^2(22[1-9]|2[3-9]\d|[3-6]\d{2}|7([01]\d|20))/.test(numeroTarjeta)) && longitud === 16) {
+                    return { tipo: "MasterCard", icono: "fab fa-cc-mastercard" }; // Icono de MasterCard
+                } else if ((numeroTarjeta.startsWith('34') || numeroTarjeta.startsWith('37')) && longitud === 15) {
+                    return { tipo: "American Express", icono: "fab fa-cc-amex" }; // Icono de American Express
+                } else if ((numeroTarjeta.startsWith('6011') || numeroTarjeta.startsWith('65') ||
+                    /^622(12[6-9]|1[3-9]\d|[2-8]\d{2}|9[01]\d|92[0-5])/.test(numeroTarjeta) ||
+                    /^64[4-9]/.test(numeroTarjeta)) && longitud === 16) {
+                    return { tipo: "Discover", icono: "fab fa-cc-discover" }; // Icono de Discover
+                } else if (/^35(2[89]|[3-8][0-9])/.test(numeroTarjeta) && longitud === 16) {
+                    return { tipo: "JCB", icono: "fab fa-cc-jcb" }; // Icono de JCB
+                } else if ((/^30[0-5]/.test(numeroTarjeta) || numeroTarjeta.startsWith('36') || numeroTarjeta.startsWith('38') || numeroTarjeta.startsWith('39')) && longitud === 14) {
+                    return { tipo: "Diners Club", icono: "fab fa-cc-diners-club" }; // Icono de Diners Club
+                } else {
+                    return { tipo: "Tarjeta desconocida o formato inválido", icono: "fas fa-credit-card" }; // Icono predeterminado
+                }
+            } else {
+                return { tipo: "Formato de número de tarjeta inválido", icono: "fas fa-credit-card" }; // Icono predeterminado
+            }
+        }
+
+        numeroTarjetaInput.addEventListener('input', function () {
+            const { tipo, icono } = identificarTarjeta(numeroTarjetaInput.value);
+            tipoTarjetaDiv.innerHTML = `
+                <div class="alert alert-info" role="alert">
+                    <i class="${icono}"></i> ${tipo}
+                </div>`;
+        });
+    });
+</script>
 {% endblock %}
